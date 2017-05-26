@@ -8,19 +8,17 @@ library(ggplot2)
 Hess_Data<-read.csv("/Users/katiekierczynski/Desktop/URP_2016_EAB/SFS/AugustaCkHessMacros.csv")
 
 ## Remove everything except macros
-Hess_Macros<-Hess_Data[,c(5:39)]
+Hess_Macros<-Hess_Data[,c(6:40)]
 row.names(Hess_Macros)<-c("A1","A2","A3","A4","A5","B1","B2","B3","B4","B5","C1","C2","C3","C4","C5","D1","D2","D3","D4","D5","E1","E2","E3","E4","E5","F1","F2","F3","F4","F5")
+
+## Separate Site Data
+Hess_Site<-Hess_Data[,c(1:4)]
+
 
 
 ## Set up factor for for Control vs Treatment (Vine vs VineRemoved)
-levels(Hess_Data$Site)
-stream_site=factor(Hess_Data$Site, 
-  levels = c("A","B","C","D","E","F"),
-  labels = c("Control","Treatment","Control","Control","Treatment","Treatment")) 
-## This method gives warning message: In `levels<-`(`*tmp*`, value = if (nl == nL) as.character(labels) else paste0(labels,:
-  ##duplicated levels in factors are deprecated
-    ## Levels: Control  Treatment Control Control Treatment Treatment
-      ## Instead of just Control and Treatment which messes with the plot (Only A and B are graphed for polygon)
+levels(Hess_Data$Treatment)
+stream_site=factor(Hess_Data$Treatment)
 
 stream_site
 
@@ -36,15 +34,15 @@ orditorp(Hess_Macros_NMDS,display = "sites")
 #Make color schemes
 two_col_vec <- c("black", "bisque3")
 
-#NMDS plot for stream_site Salmon vs Control
-with(Hess_Macros_NMDS, points(Hess_Macros_NMDS, display="sites", col=two_col_vec[stream_site]))
-with(Hess_Macros_NMDS, legend("topleft", legend=(c("Treatment","Control")), bty="n", col=two_col_vec))
+#NMDS plot for stream_site Treatment vs Control
+with(Hess_Macros_NMDS, points(Hess_Macros_NMDS, display="sites", col=two_col_vec[stream_site], pch=19, pt.bg=two_col_vec))
+with(Hess_Macros_NMDS, legend("topleft", legend=levels(stream_site), bty="n", col=two_col_vec, pch=19, pt.bg=two_col_vec))
 with(Hess_Macros_NMDS, ordiellipse(Hess_Macros_NMDS, stream_site, kind="se", conf=0.95, lwd=2, col="black", show.groups = "Treatment"))
 with(Hess_Macros_NMDS, ordiellipse(Hess_Macros_NMDS, stream_site, kind="se", conf=0.95, lwd=2, col="bisque3", show.groups = "Control"))
 
 
 
-
-
+#Permanova for stream_site Salmon vs. Control
+adonis(Hess_Macros ~ stream_site, data=Hess_Site, permutations=999)
 
 

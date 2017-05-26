@@ -10,6 +10,7 @@ Hess_Data<-read.csv("/Users/katiekierczynski/Desktop/URP_2016_EAB/SFS/AugustaCkH
 ## Remove everything except macros
 Hess_Macros<-Hess_Data[,c(6:40)]
 row.names(Hess_Macros)<-c("A1","A2","A3","A4","A5","B1","B2","B3","B4","B5","C1","C2","C3","C4","C5","D1","D2","D3","D4","D5","E1","E2","E3","E4","E5","F1","F2","F3","F4","F5")
+olnames(Hess_Macros)<-c(1:35)
 
 ## Separate Site Data
 Hess_Site<-Hess_Data[,c(1:4)]
@@ -19,7 +20,6 @@ Hess_Site<-Hess_Data[,c(1:4)]
 ## Set up factor for for Control vs Treatment (Vine vs VineRemoved)
 levels(Hess_Data$Treatment)
 stream_site=factor(Hess_Data$Treatment)
-
 stream_site
 
 
@@ -28,6 +28,7 @@ Hess_Macros_NMDS<-metaMDS(Hess_Macros,distance = "bray")
 Hess_Macros_NMDS
 
 ordiplot(Hess_Macros_NMDS, type = "n",main="Invertebrate")
+orditorp(Hess_Macros_NMDS,display = "species",col = "red",air = 0.01)
 orditorp(Hess_Macros_NMDS,display = "sites")
 
 
@@ -46,3 +47,9 @@ with(Hess_Macros_NMDS, ordiellipse(Hess_Macros_NMDS, stream_site, kind="se", con
 adonis(Hess_Macros ~ stream_site, data=Hess_Site, permutations=999)
 
 
+## Alternate NMDS plot
+ordiplot(Hess_Macros_NMDS,type="n",main="Invertebrate")
+ordihull(Hess_Macros_NMDS,groups=stream_site,draw="polygon",col="grey90",label=F)
+orditorp(Hess_Macros_NMDS,display="species",col="red",air=0.01)
+orditorp(Hess_Macros_NMDS,display="sites",
+         air=0.01,cex=1.25)

@@ -10,24 +10,52 @@ Hess_Data<-read.csv("/Users/katiekierczynski/Desktop/URP_2016_EAB/SFS/AugustaCkH
 ## Remove everything except macros
 Hess_Macros<-Hess_Data[,c(6:40)]
 row.names(Hess_Macros)<-c("A1","A2","A3","A4","A5","B1","B2","B3","B4","B5","C1","C2","C3","C4","C5","D1","D2","D3","D4","D5","E1","E2","E3","E4","E5","F1","F2","F3","F4","F5")
-olnames(Hess_Macros)<-c(1:35)
+colnames(Hess_Macros)<-c(1:35)
 
 ## Separate Site Data
 Hess_Site<-Hess_Data[,c(1:4)]
 
+## Separate Pre-trial data
+Hess_Data_Pre<-Hess_Data[c(1,2,6,7,11,12,16,17,21,22,26,27),]
+Hess_Macros_Pre<-Hess_Data_Pre[,c(6:40)]
+row.names(Hess_Macros_Pre)<-c("A1","A2","B1","B2","C1","C2","D1","D2","E1","E2","F1","F2")
+colnames(Hess_Macros_Pre)<-c(1:35)
 
+## Separate Post-trial data
+Hess_Data_Post<-Hess_Data[c(3:5,8:10,13:15,18:20,23:25,28:30),]
+Hess_Macros_Post<-Hess_Data_Post[,c(6:40)]
+row.names(Hess_Macros_Post)<-c("A3","A4","A5","B3","B4","B5","C3","C4","C5","D3","D4","D5","E3","E4","E5","F3","F4","F5")
+colnames(Hess_Macros_Post)<-c(1:35)
 
-## Set up factor for for Control vs Treatment (Vine vs VineRemoved)
+## Matrix combining colnames with taxa
+taxa<-colnames(Hess_Data[6:40])
+taxa
+colheader<-c(1:35)
+colheader
+taxanames<-paste(taxa,colheader)
+taxanames
+
+## Set up factor for for Control vs Treatment (Vine vs VineRemoved) for all samples
 levels(Hess_Data$Treatment)
 stream_site=factor(Hess_Data$Treatment)
 stream_site
 
+## Set up factor for for Control vs Treatment (Vine vs VineRemoved) for Pre-treatment data
+levels(Hess_Data_Pre$Treatment)
+stream_site_Pre=factor(Hess_Data_Pre$Treatment)
+stream_site_Pre
 
-## NMDS Analysis
+## Set up factor for for Control vs Treatment (Vine vs VineRemoved) for Post-treatment data
+levels(Hess_Data_Post$Treatment)
+stream_site_Post=factor(Hess_Data_Post$Treatment)
+stream_site_Post
+
+
+## NMDS Analysis all samples
 Hess_Macros_NMDS<-metaMDS(Hess_Macros,distance = "bray")
 Hess_Macros_NMDS
 
-ordiplot(Hess_Macros_NMDS, type = "n",main="Invertebrate")
+ordiplot(Hess_Macros_NMDS, type = "n",main="All Invertebrates")
 orditorp(Hess_Macros_NMDS,display = "species",col = "red",air = 0.01)
 orditorp(Hess_Macros_NMDS,display = "sites")
 
@@ -35,21 +63,74 @@ orditorp(Hess_Macros_NMDS,display = "sites")
 #Make color schemes
 two_col_vec <- c("black", "bisque3")
 
-#NMDS plot for stream_site Treatment vs Control
+#NMDS plot for stream_site Treatment vs Control all samples
 with(Hess_Macros_NMDS, points(Hess_Macros_NMDS, display="sites", col=two_col_vec[stream_site], pch=19, pt.bg=two_col_vec))
 with(Hess_Macros_NMDS, legend("topleft", legend=levels(stream_site), bty="n", col=two_col_vec, pch=19, pt.bg=two_col_vec))
 with(Hess_Macros_NMDS, ordiellipse(Hess_Macros_NMDS, stream_site, kind="se", conf=0.95, lwd=2, col="black", show.groups = "Treatment"))
 with(Hess_Macros_NMDS, ordiellipse(Hess_Macros_NMDS, stream_site, kind="se", conf=0.95, lwd=2, col="bisque3", show.groups = "Control"))
 
 
+## NMDS Analysis Pre-treatment samples
+Hess_Macros_Pre_NMDS<-metaMDS(Hess_Macros_Pre,distance = "bray")
+Hess_Macros_Pre_NMDS
 
-#Permanova for stream_site Salmon vs. Control
-adonis(Hess_Macros ~ stream_site, data=Hess_Site, permutations=999)
+ordiplot(Hess_Macros_Pre_NMDS, type = "n",main="Pre-Treatment Invertebrates")
+orditorp(Hess_Macros_Pre_NMDS,display = "species",col = "red",air = 0.01)
+orditorp(Hess_Macros_Pre_NMDS,display = "sites")
 
 
-## Alternate NMDS plot
-ordiplot(Hess_Macros_NMDS,type="n",main="Invertebrate")
+#NMDS plot for stream_site Treatment vs Control Pre-treatment samples
+with(Hess_Macros_Pre_NMDS, points(Hess_Macros_Pre_NMDS, display="sites", col=two_col_vec[stream_site_Pre], pch=19, pt.bg=two_col_vec))
+with(Hess_Macros_Pre_NMDS, legend("topleft", legend=levels(stream_site_Pre), bty="n", col=two_col_vec, pch=19, pt.bg=two_col_vec))
+with(Hess_Macros_Pre_NMDS, ordiellipse(Hess_Macros_Pre_NMDS, stream_site_Pre, kind="se", conf=0.95, lwd=2, col="black", show.groups = "Treatment"))
+with(Hess_Macros_Pre_NMDS, ordiellipse(Hess_Macros_Pre_NMDS, stream_site_Pre, kind="se", conf=0.95, lwd=2, col="bisque3", show.groups = "Control"))
+
+
+## NMDS Analysis Post-treatment samples
+Hess_Macros_Post_NMDS<-metaMDS(Hess_Macros_Post,distance = "bray")
+Hess_Macros_Post_NMDS
+
+ordiplot(Hess_Macros_Post_NMDS, type = "n",main="Post-Treatment Invertebrates")
+orditorp(Hess_Macros_Post_NMDS,display = "species",col = "red",air = 0.01)
+orditorp(Hess_Macros_Post_NMDS,display = "sites")
+
+
+#NMDS plot for stream_site Treatment vs Control Post-treatment samples
+with(Hess_Macros_Post_NMDS, points(Hess_Macros_Post_NMDS, display="sites", col=two_col_vec[stream_site_Post], pch=19, pt.bg=two_col_vec))
+with(Hess_Macros_Post_NMDS, legend("topleft", legend=levels(stream_site_Post), bty="n", col=two_col_vec, pch=19, pt.bg=two_col_vec))
+with(Hess_Macros_Post_NMDS, ordiellipse(Hess_Macros_Post_NMDS, stream_site_Post, kind="se", conf=0.95, lwd=2, col="black", show.groups = "Treatment"))
+with(Hess_Macros_Post_NMDS, ordiellipse(Hess_Macros_Post_NMDS, stream_site_Post, kind="se", conf=0.95, lwd=2, col="bisque3", show.groups = "Control"))
+
+
+## Alternate NMDS plot all data
+ordiplot(Hess_Macros_NMDS,type="n",main="All Invertebrates")
 ordihull(Hess_Macros_NMDS,groups=stream_site,draw="polygon",col="grey90",label=F)
 orditorp(Hess_Macros_NMDS,display="species",col="red",air=0.01)
-orditorp(Hess_Macros_NMDS,display="sites",
-         air=0.01,cex=1.25)
+orditorp(Hess_Macros_NMDS,display="sites")
+
+
+## Alternate NMDS plot Pre-treatment data
+ordiplot(Hess_Macros_Pre_NMDS,type="n",main="Pre-Treatment Invertebrates")
+ordihull(Hess_Macros_Pre_NMDS,groups=stream_site_Pre,draw="polygon",col="grey90",label=F)
+orditorp(Hess_Macros_Pre_NMDS,display="species",col="red",air=0.01)
+orditorp(Hess_Macros_Pre_NMDS,display="sites")
+
+
+## Alternate NMDS plot Post-treatment ata
+ordiplot(Hess_Macros_Post_NMDS,type="n",main="Post-Treatment Invertebrates")
+ordihull(Hess_Macros_Post_NMDS,groups=stream_site_Post,draw="polygon",col="grey90",label=F)
+orditorp(Hess_Macros_Post_NMDS,display="species",col="red",air=0.01)
+orditorp(Hess_Macros_Post_NMDS,display="sites")
+
+
+
+#Permanova for stream_site Treatment vs. Control
+adonis(Hess_Macros ~ stream_site, data=Hess_Site, permutations=999)
+## Check for interaction with Date
+adonis(Hess_Macros~stream_site*Hess_Site$Date,data=Hess_Site,permutations = 999)
+
+##Permanova with Date as covariate
+adonis(Hess_Macros~Hess_Site$Date,data=Hess_Site,permutations = 999)
+## Check for interaction with Date
+adonis(Hess_Macros~Hess_Site$Date*stream_site,data=Hess_Site,permutations = 999)
+

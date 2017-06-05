@@ -108,10 +108,10 @@ Post_LM_Heatmap<-heatmap(LM_Macros_Post_Matrix,Rowv = NA,Colv = NA,col=cm.colors
 
 Control_Pre_LM_Heatmap<-heatmap(LM_Control_Pre_Matrix,Rowv = NA,Colv = NA,col=cm.colors(256),
                                 scale="column",main = "Pre-Treatment Control Log Community Heatmap")
-Treat_Pre_LM_Heatmap<-heatmap(LM_Treat_Pre_Matrix,Rowv = NA, Colv = NA, col=cm.colors(256),
-                              scale="column",main="Pre-Treatment Treated Log Community Heatmap")
 Control_Post_LM_Heatmap<-heatmap(LM_Control_Post_Matrix,Rowv = NA,Colv = NA,col=cm.colors(256),
                                  scale="column",main="Post-Treatment Control Log Community Heatmap")
+Treat_Pre_LM_Heatmap<-heatmap(LM_Treat_Pre_Matrix,Rowv = NA, Colv = NA, col=cm.colors(256),
+                              scale="column",main="Pre-Treatment Treated Log Community Heatmap")
 Treat_Post_LM_Heatmpa<-heatmap(LM_Treat_Post_Matrix,Rowv = NA,Colv = NA,col=cm.colors(256),
                                scale="column", main="Post-Treatment Treated Log Community Heatmap")
 ## recommit to github
